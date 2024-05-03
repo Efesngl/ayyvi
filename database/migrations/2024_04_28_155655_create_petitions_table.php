@@ -19,8 +19,7 @@ return new class extends Migration
             $table->text('petition_banner');
             $table->integer('creator')->index('creator');
             $table->integer('target_sign');
-            $table->integer("status")->default("1");
-            $table->foreign("status")->references("id")->on("petition_statuses");
+            $table->unsignedBigInteger("status")->nullable();
         });
     }
 

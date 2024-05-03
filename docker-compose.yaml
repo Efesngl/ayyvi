@@ -1,0 +1,28 @@
+services:
+  database:
+    image: mysql
+    environment:
+    - MYSQL_ROOT_PASSWORD=password
+    - MYSQL_USER=ayyvi
+    - MYSQL_PASSWORD=ayyvi
+    networks:
+    - database
+    ports:
+      - 3306:3306
+    volumes:
+      - database:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin
+    environment:
+      # - PMA_ARBITRARY=1
+      - PMA_HOST=database
+    ports:
+      - 8080:80
+    networks:
+      - database
+volumes:
+  database:
+    driver: "local"
+networks:
+  database:
+    name: "database"

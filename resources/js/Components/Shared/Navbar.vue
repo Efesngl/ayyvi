@@ -6,21 +6,21 @@
                 <a href="/"><img src="/assets/img/logo/png/lb.png" id="logo" alt="" /></a>
                 <ul>
                     <li>
-                        <a class="nav-links" :class="{'active-navbar':route().current()=='home'}" href="/"> Ana Sayfa</a>
+                        <Link class="nav-links" :class="{'active-navbar':route().current()=='home'}" href="/"> Ana Sayfa</Link>
                     </li>
                     <li>
-                        <a class="nav-links" href="/kampanyabaslat"> Kampanya başlat</a>
+                        <Link class="nav-links" :href="route('petition.create')" :class="{'active-navbar':route().current()=='petition.create'}"> Kampanya başlat</Link>
                     </li>
-                    <li><a class="nav-links" href="{name:'BrowsePetitions'}"> Göz at</a></li>
-                    <li><a class="nav-links" href="/bagis"> Bağışçı ol</a></li>
+                    <li><Link class="nav-links" href="{name:'BrowsePetitions'}"> Göz at</Link></li>
+                    <li><Link class="nav-links" href="/bagis"> Bağışçı ol</Link></li>
                 </ul>
             </div>
             <div id="user-links" v-if="user==null">
                 <div class="dropdown">
                     <i class="bi bi-person-circle" id="user-logo" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" :href="route('login')">Giriş yap</a></li>
-                        <li><a class="dropdown-item" :href="route('register')">Üye ol</a></li>
+                        <li><Link class="dropdown-item" :href="route('login')">Giriş yap</Link></li>
+                        <li><Link class="dropdown-item" :href="route('register')">Üye ol</Link></li>
                     </ul>
                 </div>
             </div>
@@ -28,8 +28,8 @@
                 <div class="dropdown">
                     <i class="bi bi-person-circle" id="user-logo" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/hesabim/hesapdetaylari">Hesabım</a></li>
-                        <li><a class="dropdown-item" href="logout">Çıkış Yap</a></li>
+                        <li><Link class="dropdown-item" href="/hesabim/hesapdetaylari">Hesabım</Link></li>
+                        <li><Link class="dropdown-item" href="logout">Çıkış Yap</Link></li>
                     </ul>
                 </div>
             </div>
@@ -37,10 +37,10 @@
     </nav>
 
     <!-- offcanvas navbar -->
-    <nav class="d-block d-md-none">
+    <!-- <nav class="d-block d-md-none">
         <div id="navbar">
             <div id="site-links">
-                <a href="/"><img src="/assets/img/logo/png/lb.png" id="logo" alt="" /></a>
+                <Link href="/"><img src="/assets/img/logo/png/lb.png" id="logo" alt="" /></Link>
             </div>
             <div class="user-links d-flex align-items-center">
                 <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasmenu" aria-controls="offcanvasmenu">
@@ -90,13 +90,17 @@
                 </div>
             </div>
         </div>
-    </nav>
+    </nav> -->
     <!-- offcanvas navbar end -->
 </template>
 
 <script>
+import { Link } from '@inertiajs/vue3'
 import { usePage } from '@inertiajs/vue3';
 export default {
+    components:{
+        Link,
+    },
     computed:{
         user(){
             return this.page.props.user
@@ -124,7 +128,7 @@ export default {
   color: var(--bs-white);
 }
 #navbar {
-    border-bothrefm: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     padding: 0.5rem 0.5rem;
     display: flex;

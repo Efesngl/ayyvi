@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PetitionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/',[HomeController::class,"index"])->name("home");
@@ -10,5 +11,6 @@ Route::controller(AuthController::class)->group(function(){
     Route::inertia("/register","Auth/Register")->name("register");
     Route::post("login","login")->name("login");
     Route::post("/register","register")->name("register");
-    Route::get("/logout","logout");
+    Route::get("/logout","logout")->name("logout");
 });
+Route::resource("/petition",PetitionController::class);
