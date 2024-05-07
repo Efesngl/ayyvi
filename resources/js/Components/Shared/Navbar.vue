@@ -11,7 +11,7 @@
                     <li>
                         <Link class="nav-links" :href="route('petition.create')" :class="{'active-navbar':route().current()=='petition.create'}"> Kampanya başlat</Link>
                     </li>
-                    <li><Link class="nav-links" href="{name:'BrowsePetitions'}"> Göz at</Link></li>
+                    <li><Link class="nav-links" :href="route('petition.index')" :class="{'active-navbar':route().current()=='petition.index'}"> Göz at</Link></li>
                     <li><Link class="nav-links" href="/bagis"> Bağışçı ol</Link></li>
                 </ul>
             </div>
@@ -28,8 +28,8 @@
                 <div class="dropdown">
                     <i class="bi bi-person-circle" id="user-logo" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
                     <ul class="dropdown-menu">
-                        <li><Link class="dropdown-item" href="/hesabim/hesapdetaylari">Hesabım</Link></li>
-                        <li><Link class="dropdown-item" href="logout">Çıkış Yap</Link></li>
+                        <li><Link class="dropdown-item" :href="route('profile.show')">Hesabım</Link></li>
+                        <li><Link class="dropdown-item" :href="route('logout')">Çıkış Yap</Link></li>
                     </ul>
                 </div>
             </div>

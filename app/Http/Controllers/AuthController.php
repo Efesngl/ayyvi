@@ -20,21 +20,6 @@ class AuthController extends Controller
         return back()->withErrors([
             'user' => 'The provided credentials do not match our records.',
         ]);
-
-    }
-    public function register(Request $request)
-    {
-        $credentials = $request->validate([
-            "name" => "required",
-            "email" => "required",
-            "password" => "required",
-            "termsAndPrivacy" => "required|accepted"
-        ]);
-        if (User::where("email", $credentials["email"])->doesntExist()) {
-            $user = User::create($credentials);
-            Auth::login($user, $remember = true);
-            return Inertia::location(route("home"));
-        }
     }
 
     public function logout()

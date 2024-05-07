@@ -33,7 +33,7 @@ export default {
       targetSign:10
     };
   },
-  inject: ["decStep"],
+  inject: ["decStep","petition"],
   methods: {
     checkNumber(){
       if(this.targetSign<10){
@@ -46,11 +46,10 @@ export default {
     },
     incStep(){
       if(this.isNumberValid()){
-        this.petitionStore.petition.targetSign=this.targetSign
+        this.petition.targetSign=this.targetSign
         this.$emit("incStepOk")
       }
     }
   },
 };
 </script>
-../../stores/StartPetition

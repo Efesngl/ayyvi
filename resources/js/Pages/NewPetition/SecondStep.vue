@@ -5,14 +5,14 @@
         <h2 class="fs-1">Lütfen kampanyanıza en uygun konu başlığını seçiniz</h2>
       </div>
     </div>
-    <div class="row" v-if="errors.length>0">
+    <div class="row" v-if="errors.petitionTypeNotSelected">
       <div class="col-12">
-        <span class="text-danger">{{ errors[0] }}</span>
+        <span class="text-danger">Lütfen bir konu başlığı seçiniz</span>
       </div>
     </div>
     <div class="row mt-3 g-1 justify-content-between">
       <div class="col" v-for="(t, index) in topics">
-        <input @click="setTopic(t.ID)" type="radio" class="btn-check" name="topics" :id="'topic' + index" autocomplete="off" :checked="petitionInfo.petition.petitionTopic==t.ID" />
+        <input @click="setTopic(t.id)" type="radio" class="btn-check" name="topics" :id="'topic' + index" autocomplete="off" :checked="petition.petitionTopic==t.id" />
         <label class="btn btn-outline-danger w-100 h-100" :for="'topic' + index">{{ t.topic }}</label>
       </div>
     </div>
@@ -29,15 +29,31 @@
 
 <script>
 export default {
-  inject: ["decStep"],
+  inject: ["decStep","topics","petition"],
   data(){
     return{
-      topics: [],
-      errors:[]
+      errors:{
+        petitionTypeNotSelected:null
+      }
     }
   },
-  beforeMount(){
-    this.getTopics()
-  },
+  methods:{
+    setTopic(t){
+      this.petition.petitionTopic=t
+    },
+    checkErrors(){
+      this.errors.petitionTypeNotSelected=false
+      if(this.petition.petitionTopic==0){
+        this.errors.petitionTypeNotSelected=true
+        return false
+      }
+      return true
+    },  
+    incStep(){
+      if(this.checkErrors()){
+        this.$emit("incStepOk")
+      }
+    },
+  }
 };
 </script>

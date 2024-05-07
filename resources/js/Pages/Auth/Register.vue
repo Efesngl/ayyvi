@@ -91,7 +91,7 @@ export default {
     },
     methods: {
         register() {
-            router.post(route("register"), this.user,{
+            router.post(route("user.store"), this.user,{
                 onSuccess: (page) => {
                     console.log(page);
                 },

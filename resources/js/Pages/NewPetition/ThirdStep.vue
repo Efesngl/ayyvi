@@ -13,7 +13,7 @@
             <span class="text-danger">{{ errors[0] }}</span>
           </div>
         </div>
-        <input type="text" v-model="petitionInfo.petition.petitionHeader" class="form-control" name="petition-header" id="petition-header" />
+        <input type="text" v-model="petition.petitionHeader" class="form-control" name="petition-header" id="petition-header" />
       </div>
     </div>
     <div class="row mt-3 justify-content-between">
@@ -30,23 +30,23 @@
 <script>
 
   export default{
-    inject:["decStep"],
+    inject:["decStep","petition"],
     data(){
       return {
         errors:[]
       }
     },
     methods:{
-      ispetitionHeaderEmpty(){
+      checkErrors(){
         this.errors=[]
-        if(this.petitionInfo.petition.petitionHeader==null || this.petitionInfo.petition.petitionHeader==""){
+        if(this.petition.petitionHeader==null || this.petition.petitionHeader.trim()==""){
           this.errors.push("Lütfen kampanya başlığı giriniz !")
-          return true
+          return false
         }
-        return false
+        return true
       },
       incStep(){
-        if(!this.ispetitionHeaderEmpty()){
+        if(this.checkErrors()){
           this.$emit("incStepOk")
         }
       }

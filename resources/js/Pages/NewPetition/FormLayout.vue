@@ -7,7 +7,7 @@
         </div>
       </div>
     </div>
-    <div class="row justify-content-center">
+    <div class="row h-100 justify-content-center">
       <div class="col-12 col-md-10 d-flex justify-content-center" v-auto-animate>
         <slot name="formContent"></slot>
       </div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-5 container w-75 h-100 d-flex flex-column justify-content-between" id="start-petition-form" v-if="userStore.isLogged">
+    <div class="mt-5 container w-75 h-100 d-flex flex-column justify-content-between" id="start-petition-form" v-if="$page.props.user!=null">
         <div class="row">
             <div class="col-12 text-center">
                 <h2 class="fs-1">Herşey hazır hadi kampanyanı yayınlayalım !</h2>
@@ -10,7 +10,7 @@
                 <button class="btn btn-danger" @click="decStep">Önceki adım</button>
             </div>
             <div class="col-6 text-center">
-                <button class="btn btn-danger" @click="startThePetition">Kampanyayı yayınla</button>
+                <button class="btn btn-danger" @click="createPetition">Kampanyayı yayınla</button>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
                 <button class="btn btn-danger h-100" @click="decStep">Önceki adım</button>
             </div>
             <div class="col-6 text-center">
-                <RouterLink to="/giris" class="btn btn-danger h-100">Giriş yap</RouterLink>
+                <Link :href="route('login')" class="btn btn-danger h-100">Giriş yap</Link>
                 <!-- <button class="btn btn-danger" @click="startThePetition">Giriş Yap</button> -->
             </div>
         </div>
@@ -33,13 +33,16 @@
 </template>
 
 <script>
+import { Link,router } from '@inertiajs/vue3';
 export default {
-    data() {
-        return {
-        };
+    inject: ["decStep","user","petition"],
+    components:{
+        Link
     },
-    inject: ["decStep"],
-    methods: {
-    },
+    methods:{
+        createPetition(){
+            router.post(route("petition.store"),petition)
+        }
+    }
 };
 </script>

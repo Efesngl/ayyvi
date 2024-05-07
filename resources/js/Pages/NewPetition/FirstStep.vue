@@ -10,13 +10,13 @@
         <small class="fs-5">Bir kampanya türü seçin</small>
       </div>
     </div>
-    <div class="row" v-if="errors.petitionNotSelected">
+    <div class="row" v-if="errors.petitionTypeNotSelected">
       <div class="col-12">
         <span class="text-danger">Lütfen bir kampanya türü seçiniz !</span>
       </div>
     </div>
     <div class="row gap-2 gap-md-0 mt-3">
-      <div class="col-md-4 col-12" v-for="pt in petitionTypes">
+      <div class="col-md-6 col-12" v-for="pt in petitionTypes">
         <div class="petition-type text-center" :class="{ 'selected-petition-type': pt.selected }" @click="selectpetitionType(pt)">
           <div class="row">
             <div class="col-12">
@@ -31,17 +31,6 @@
         </div>
       </div>
     </div>
-    <div class="row mt-3" v-if="petitionInfo.petition.petitionType == 1">
-      <div class="col-12">
-        <label for="location"><small>Kampanyanın etkileyeceği yer</small></label>
-        <div class="row" v-if="errors.petitionLocationNotSelected">
-          <div class="col-12">
-            <span class="text-danger"> Lütfen kampanyayın etkileyeceği alanı giriniz ! </span>
-          </div>
-        </div>
-        <input type="text" class="form-control" name="location" v-model="petitionInfo.petition.petitionLocation" id="petitionLocation" />
-      </div>
-    </div>
     <div class="row mt-3 justify-content-center">
       <div class="col-6 text-center">
         <button class="btn btn-danger" @click="incStep">Sonraki adım</button>
@@ -52,15 +41,10 @@
 
 <script>
 export default {
+  inject:["petition"],
   data() {
     return {
       petitionTypes: [
-        {
-          typeID: 1,
-          type: "Yerel",
-          icon: '<i class="bi bi-house-heart-fill"></i>',
-          selected: false,
-        },
         {
           typeID: 2,
           type: "Ulusal",
@@ -75,15 +59,26 @@ export default {
         },
       ],
       errors: {
-        petitionNotSelected: false,
-        petitionLocationNotSelected: false,
+        petitionTypeNotSelected: false,
       },
     };
   },
   methods: {
     checkErrors() {
+      this.errors.petitionTypeNotSelected=false
+      if(this.petition.petitionType==0){
+        this.errors.petitionTypeNotSelected=true
+        return false
+      }
       return true;
     },
+    selectpetitionType(pt){
+      for (const pt of this.petitionTypes) {
+        pt.selected=false
+      }
+      this.petition.petitionType=pt.typeID
+      pt.selected=true
+    },  
     incStep() {
       if (this.checkErrors()) {
         this.$emit("incStepOk");

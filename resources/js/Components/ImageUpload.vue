@@ -54,7 +54,7 @@ export default {
           required:true
         }
     },
-    inject: ["petitionEditInfo"],
+    inject: ["petition"],
     data() {
         return {
             isImageUploaded: false,
@@ -81,8 +81,7 @@ export default {
                         (this.imageInfo.name = file.name.split(".").shift());
                     // Check if file is an image
                     this.isImageUploaded = true;
-                    if (this.peInfo == undefined) this.petitionInfo.petition.petitionImage = this.imageInfo;
-                    else this.peInfo.petitionImage=this.imageInfo
+                    this.petition.petitionBanner=this.imageInfo
                     let reader = new FileReader();
                     reader.addEventListener("load", () => {
                         this.imageInfo.url = reader.result;
@@ -107,8 +106,7 @@ export default {
                 name: null,
                 url: null,
             };
-            if (this.peInfo == undefined) this.petitionInfo.petition.petitionImage = this.imageInfo;
-            else this.peInfo.petitionImage = this.imageInfo;
+            this.petition.petitionBanner = this.imageInfo;
         },
         checkErrors() {
             if (!this.isImageUploaded) return false;

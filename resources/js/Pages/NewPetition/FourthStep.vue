@@ -12,10 +12,10 @@
     </div>
     <div class="row flex-fill mb-5">
       <div class="col-12 h-100">
-        <ckeditor :editor="editor" v-model="petitionInfo.petition.petitionContent" :config="editorConfig"></ckeditor>
+        <ckeditor :editor="editor" v-model="petition.petitionContent" :config="editorConfig"></ckeditor>
       </div>
     </div>
-    <div class="row mt-3 justify-content-between">
+    <div class="row mt-3 justify-content-betwee mb-5">
       <div class="col-6">
         <button class="btn btn-danger" @click="decStep">Önceki adım</button>
       </div>
@@ -31,7 +31,7 @@ import '@ckeditor/ckeditor5-build-classic/build/translations/tr.js';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CKEditor from "@ckeditor/ckeditor5-vue"
 export default {
-  inject: ["formStep", "decStep"],
+  inject: ["decStep","petition"],
   components: {
     ckeditor:CKEditor.component
   },
@@ -64,4 +64,9 @@ export default {
   },
 };
 </script>
-../../stores/StartPetition
+
+<style>
+  .ck-editor__editable{
+    height: 15rem;
+  }
+</style>

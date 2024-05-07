@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Petition;
-use App\Models\Topic;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class PetitionController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,12 +15,6 @@ class PetitionController extends Controller
     public function index()
     {
         //
-        $petitions=Petition::all();
-        $topics=[];
-        return Inertia::render("Browse/Browse",[
-            "petitions"=>$petitions,
-            "topics"=>$topics
-        ]);
     }
 
     /**
@@ -30,21 +23,6 @@ class PetitionController extends Controller
     public function create()
     {
         //
-        $petition=[
-            "petitionHeader"=>"",
-            "petitionContent"=>"",
-            "petitionTopic"=>0,
-            "petitionBanner"=>"",
-            "petitionType"=>0,
-            "targetSign"=>0,
-            "creator"=>Auth::user()->id ?? null
-        ];
-        $topics=Topic::all();
-        return Inertia::render("NewPetition/StartPetition",[
-            "petition"=>$petition,
-            "topics"=>$topics,
-            "_token"=>csrf_token()
-        ]);
     }
 
     /**
@@ -53,7 +31,17 @@ class PetitionController extends Controller
     public function store(Request $request)
     {
         //
-        return $request->all();
+            $credentials = $request->validate([
+                "name" => "required",
+                "email" => "required",
+                "password" => "required",
+                "termsAndPrivacy" => "required|accepted"
+            ]);
+            if (User::where("email", $credentials["email"])->doesntExist()) {
+                $user = User::create($credentials);
+                Auth::login($user, $remember = true);
+                return Inertia::location(route("home"));
+            }
     }
 
     /**
@@ -78,6 +66,7 @@ class PetitionController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        
     }
 
     /**
@@ -86,8 +75,5 @@ class PetitionController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-    function uploadBanner(Request $request){
-        $request->file("file")->store("/petition_content/1/banner");
     }
 }

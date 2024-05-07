@@ -31,7 +31,14 @@ import FormLayout from "./FormLayout.vue";
 import * as Steps from "./FormStepImports.js";
 import { computed } from "vue";
 import MainLayout from "../../Layouts/MainLayout.vue";
+import { useRemember } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 export default {
+    props: {
+        petition: Object,
+        topics: Object,
+        _token:String
+    },
     components: {
         FormLayout,
         FirstStep: Steps.FirstStep,
@@ -46,7 +53,18 @@ export default {
     data() {
         return {
             formStep: 1,
+            handleRouteLeave: null,
         };
+    },
+    mounted() {
+            this.handeRouteLeave = router.on("before", (event) => {
+                return (this.formStep==1)? true: confirm("Do you want to leave this page ? \n All changes will be lost !!!");
+            });
+    },
+    beforeUnmount() {
+        if(this.handeRouteLeave!=null){
+            this.handeRouteLeave();
+        }
     },
     computed: {
         formProgress() {
@@ -65,6 +83,9 @@ export default {
         return {
             decStep: this.decStep,
             formProgress: computed(() => this.formProgress),
+            petition: computed(() => this.petition),
+            topics: this.topics,
+            _token:this._token
         };
     },
 };
