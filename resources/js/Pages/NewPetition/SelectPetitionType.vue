@@ -46,13 +46,13 @@ export default {
     return {
       petitionTypes: [
         {
-          typeID: 2,
+          typeID: 1,
           type: "Ulusal",
           icon: '<i class="bi bi-flag-fill"></i>',
           selected: false,
         },
         {
-          typeID: 3,
+          typeID: 2,
           type: "Global",
           icon: '<i class="bi bi-globe"></i>',
           selected: false,
@@ -63,6 +63,11 @@ export default {
       },
     };
   },
+  beforeMount(){
+    for (const pt of this.petitionTypes) {
+      if(pt.typeID==this.petition.petitionType) pt.selected=true
+    }
+  },  
   methods: {
     checkErrors() {
       this.errors.petitionTypeNotSelected=false

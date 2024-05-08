@@ -189,6 +189,7 @@ export default {
     },
     data() {
         return {
+            page:1,
             of: null,
             filter: {
                 search: "",

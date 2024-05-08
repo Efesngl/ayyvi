@@ -16,7 +16,7 @@ class PetitionController extends Controller
     public function index()
     {
         //
-        $petitions=Petition::all();
+        $petitions=Petition::whereNotNull("petition_banner")->get();
         $topics=[];
         return Inertia::render("Browse/Browse",[
             "petitions"=>$petitions,
@@ -52,8 +52,24 @@ class PetitionController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        return $request->all();
+        
+        $petitionDetail=$request->validate([
+            "petitionHeader"=>"required",
+            "petitionTopic"=>"required",
+            "petitionType"=>"required",
+            "petitionContent"=>"required|string",
+            "targetSign"=>"required|min:10|integer",
+            "creator"=>"required"
+        ]);
+        $petition=new Petition;
+        $petition->petition_header=$petitionDetail["petitionHeader"];
+        $petition->petition_content=$petitionDetail["petitionContent"];
+        $petition->creator=$petitionDetail["creator"];
+        $petition->target_sign=$petitionDetail["targetSign"];
+        $petition->status=1;
+        $petition->save();
+        $petition->topic()->attach($petitionDetail["petitionTopic"]);
+        return Inertia::location("petition.index");
     }
 
     /**
@@ -70,6 +86,12 @@ class PetitionController extends Controller
     public function edit(string $id)
     {
         //
+        $petition=Petition::with("topic")->findOrFail($id);
+        return Inertia::render("User/EditPetition",[
+            "petition"=>$petition,
+            "topics"=>Topic::all(),
+            "csrf_token"=>csrf_token()
+        ]);
     }
 
     /**
@@ -88,6 +110,12 @@ class PetitionController extends Controller
         //
     }
     function uploadBanner(Request $request){
-        $request->file("file")->store("/petition_content/1/banner");
+        $request->file("file")->storeAs("public/petition_content/1","banner.jpg");
+    }
+    function userPetitions(){
+        $petitions=Petition::where("creator",Auth::user()->id)->get();
+        return Inertia::render("User/UserPetitions",[
+            "petitions"=>$petitions
+        ]);
     }
 }

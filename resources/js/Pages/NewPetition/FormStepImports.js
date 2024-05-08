@@ -1,9 +1,8 @@
-import FirstStep from "./FirstStep.vue";
-import SecondStep from "./SecondStep.vue";
-import ThirdStep from "./ThirdStep.vue";
-import FourthStep from "./FourthStep.vue";
-import FifthStep from "./FifthStep.vue";
-import SixthStep from "./SixthStep.vue";
-import SeventhStep from "./SeventhStep.vue";
+import SelectPetitionType from "./SelectPetitionType.vue";
+import SelectPetitionTopic from "./SelectPetitionTopic.vue";
+import PetitionHeader from "./PetitionHeader.vue";
+import PetitionContent from "./PetitionContent.vue";
+import PetitionTargetSign from "./PetitionTargetSign.vue";
+import CreatePetition from "./CreatePetition.vue";
 
-export { FirstStep, SecondStep, ThirdStep, FourthStep, FifthStep, SixthStep,SeventhStep };
+export { SelectPetitionType, SelectPetitionTopic, PetitionHeader, PetitionContent, PetitionTargetSign, CreatePetition };

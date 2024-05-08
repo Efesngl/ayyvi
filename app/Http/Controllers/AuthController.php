@@ -13,7 +13,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate(["email" => "required", "password" => "required"]);
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials,$request->input("remember"))) {
             session()->regenerate();
             return Inertia::location(route("home"));
         }

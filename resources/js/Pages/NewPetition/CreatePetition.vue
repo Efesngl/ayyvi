@@ -35,13 +35,14 @@
 <script>
 import { Link,router } from '@inertiajs/vue3';
 export default {
-    inject: ["decStep","user","petition"],
+    inject: ["decStep","petition","routeLeave"],
     components:{
         Link
     },
     methods:{
         createPetition(){
-            router.post(route("petition.store"),petition)
+            this.routeLeave()
+            router.post(route("petition.store"),this.petition)
         }
     }
 };

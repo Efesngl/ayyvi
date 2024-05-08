@@ -2,25 +2,22 @@
     <MainLayout>
         <FormLayout>
             <template v-slot:formContent v-if="formStep == 1">
-                <FirstStep @incStepOk="incStep"></FirstStep>
+                <SelectPetitionType @incStepOk="incStep"></SelectPetitionType>
             </template>
             <template v-slot:formContent v-if="formStep == 2">
-                <SecondStep @incStepOk="incStep"></SecondStep>
+                <SelectPetitionTopic @incStepOk="incStep"></SelectPetitionTopic>
             </template>
             <template v-slot:formContent v-if="formStep == 3">
-                <ThirdStep @incStepOk="incStep"></ThirdStep>
+                <PetitionHeader @incStepOk="incStep"></PetitionHeader>
             </template>
             <template v-slot:formContent v-if="formStep == 4">
-                <FourthStep @incStepOk="incStep"></FourthStep>
+                <PetitionContent @incStepOk="incStep"></PetitionContent>
             </template>
             <template v-slot:formContent v-if="formStep == 5">
-                <FifthStep @incStepOk="incStep"></FifthStep>
+                <PetitionTargetSign @incStepOk="incStep"></PetitionTargetSign>
             </template>
             <template v-slot:formContent v-if="formStep == 6">
-                <SixthStep @incStepOk="incStep"></SixthStep>
-            </template>
-            <template v-slot:formContent v-if="formStep == 7">
-                <SeventhStep></SeventhStep>
+                <CreatePetition @incStepOk="incStep"></CreatePetition>
             </template>
         </FormLayout>
     </MainLayout>
@@ -31,7 +28,6 @@ import FormLayout from "./FormLayout.vue";
 import * as Steps from "./FormStepImports.js";
 import { computed } from "vue";
 import MainLayout from "../../Layouts/MainLayout.vue";
-import { useRemember } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
 export default {
     props: {
@@ -41,13 +37,12 @@ export default {
     },
     components: {
         FormLayout,
-        FirstStep: Steps.FirstStep,
-        SecondStep: Steps.SecondStep,
-        ThirdStep: Steps.ThirdStep,
-        FourthStep: Steps.FourthStep,
-        FifthStep: Steps.FifthStep,
-        SixthStep: Steps.SixthStep,
-        SeventhStep: Steps.SeventhStep,
+        SelectPetitionType:Steps.SelectPetitionType,
+        SelectPetitionTopic:Steps.SelectPetitionTopic,
+        PetitionHeader:Steps.PetitionHeader,
+        PetitionContent:Steps.PetitionContent,
+        PetitionTargetSign:Steps.PetitionTargetSign,
+        CreatePetition:Steps.CreatePetition,
         MainLayout,
     },
     data() {
@@ -84,6 +79,7 @@ export default {
             decStep: this.decStep,
             formProgress: computed(() => this.formProgress),
             petition: computed(() => this.petition),
+            routeLeave:computed(()=>this.handeRouteLeave),
             topics: this.topics,
             _token:this._token
         };

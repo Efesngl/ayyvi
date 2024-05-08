@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('petitions', function (Blueprint $table) {
+        Schema::create('topic_petition_pivot', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('petition_header');
-            $table->text('petition_content');
-            $table->text('petition_banner')->nullable();
-            $table->integer('creator')->index('creator');
-            $table->integer('target_sign');
-            $table->unsignedBigInteger("status")->nullable();
+            $table->integer("petition_id");
+            $table->integer("topic_id");
         });
     }
 
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('petitions');
+        Schema::dropIfExists('topic_petition_pivot');
     }
 };
