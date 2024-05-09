@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Petition;
 use App\Models\Topic;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -69,7 +70,7 @@ class PetitionController extends Controller
         $petition->status=1;
         $petition->save();
         $petition->topic()->attach($petitionDetail["petitionTopic"]);
-        return Inertia::location("petition.index");
+        return to_route("petition.index");
     }
 
     /**
@@ -86,7 +87,9 @@ class PetitionController extends Controller
     public function edit(string $id)
     {
         //
-        $petition=Petition::with("topic")->findOrFail($id);
+        $petition=Petition::with(["topic"=>function(\Illuminate\Contracts\Database\Eloquent\Builder $b){
+            $b->select("topic_id");
+        }])->findOrFail($id);
         return Inertia::render("User/EditPetition",[
             "petition"=>$petition,
             "topics"=>Topic::all(),
@@ -99,7 +102,26 @@ class PetitionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $petition=$request->validate([
+            "petition_header"=>"required",
+            "petition_content"=>"required",
+            "topic"=>[
+                "topic_id"=>"required"
+            ],
+            "target_sign"=>"required|integer|min:10",
+            "petition_banner"=>"nullable",
+            "status"=>"required"
+        ]);
+        $p=Petition::find($id);
+        $p->petition_header=$petition["petition_header"];
+        $p->petition_content=$petition["petition_content"];
+        if($request->hasFile("petition_banner")){
+            $p->petition_banner=str_replace("public/","storage/",$request->file("petition_banner")->storeAs("public/petition_content/{$id}","banner.jpg"));
+        }
+        $p->target_sign=$petition["target_sign"];
+        $p->status=$petition["status"];
+        $p->topic()->sync([$petition["topic"][0]["topic_id"]]);
+        $p->save();
     }
 
     /**
@@ -108,6 +130,8 @@ class PetitionController extends Controller
     public function destroy(string $id)
     {
         //
+        // Petition::destroy($id);
+        return redirect()->route("user.petitions");
     }
     function uploadBanner(Request $request){
         $request->file("file")->storeAs("public/petition_content/1","banner.jpg");

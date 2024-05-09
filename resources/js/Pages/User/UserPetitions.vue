@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-12 text-center">
                     <h3 class="text-danger">Başlattığınız herhangi bir kampanya yoktur !</h3>
-                    <Link :href="route('petitions.create')" class="btn btn-danger">Hemen bir kampanya başlatın</Link>
+                    <Link :href="route('petition.create')" class="btn btn-danger">Hemen bir kampanya başlatın</Link>
                 </div>
             </div>
         </div>
