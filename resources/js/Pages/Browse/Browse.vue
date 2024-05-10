@@ -125,7 +125,7 @@
                                 </div>
                             </div>
                         </div>
-                        <BrowsepetitionCard v-for="petition in petitions" :petition="petition">
+                        <BrowsepetitionCard v-for="petition in petitions.data" :petition="petition" v-if="petitions.total>0">
                             <template v-slot:browsepetitionCardImage>
                                 <img :src="'/'+petition.petition_banner" class="w-100 h-100 rounded-start" style="object-fit: fill" alt="..." />
                             </template>
@@ -138,24 +138,31 @@
                             <template v-slot:browsepetitionCardButton>
                                 <div class="row mt-2">
                                     <div class="col-12 text-center">
-                                        <RouterLink :to="{ name: 'PetitionDetail', params: { ID: petition.ID } }" class="btn btn-danger text-decoration-none"
-                                            >Kampanyaya git</RouterLink
+                                        <Link :href="route('petition.show',petition.id)" class="btn btn-danger text-decoration-none"
+                                            >Kampanyaya git</Link
                                         >
                                     </div>
                                 </div>
                             </template>
                         </BrowsepetitionCard>
-                        <div class="row">
+                        <div class="row" v-else>
+                            <div class="col-12">
+                                <h3 >
+                                    There isn't any petition yet !
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="row" v-if="petitions.total!=0">
                             <div class="col-12">
                                 <ul class="pagination justify-content-center">
-                                    <li class="page-item" @click="decPage" :class="{ disabled: this.page == 1 && this.page <= this.paginator }">
+                                    <li class="page-item" :class="{ disabled: petitions.current_page == 1 }">
                                         <button class="page-link"><i class="bi bi-arrow-left"></i></button>
                                     </li>
-                                    <li class="page-item" @click="setPage(p)" :class="{ active: p == this.page }" v-for="p in paginator">
+                                    <li class="page-item" :class="{ active: p == petitions.current_page }" v-for="p in petitions.total/petitions.per_page">
                                         <button class="page-link">{{ p }}</button>
                                     </li>
-                                    <li class="page-item" @click="incPage">
-                                        <button class="page-link" :class="{ disabled: this.page == this.paginator && this.paginator <= this.page }">
+                                    <li class="page-item">
+                                        <button class="page-link" :class="{ disabled: petitions.current_page == petitions.last_page}">
                                             <i class="bi bi-arrow-right"></i>
                                         </button>
                                     </li>
@@ -173,10 +180,12 @@
 import MainLayout from "../../Layouts/MainLayout.vue";
 import BrowsepetitionCard from "../../Components/BrowsePetitionCard.vue";
 import * as bootstrap from "bootstrap";
+import { Link } from "@inertiajs/vue3";
 export default {
     components: {
         BrowsepetitionCard,
         MainLayout,
+        Link
     },
     computed: {
         paginator() {

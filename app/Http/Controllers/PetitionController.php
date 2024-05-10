@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Petition;
+use App\Models\SignedPetition;
 use App\Models\Topic;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class PetitionController extends Controller
     public function index()
     {
         //
-        $petitions=Petition::whereNotNull("petition_banner")->get();
+        $petitions=Petition::has("reason",">",0)->whereNotNull("petition_banner")->paginate(10);
         $topics=[];
         return Inertia::render("Browse/Browse",[
             "petitions"=>$petitions,
@@ -70,7 +71,7 @@ class PetitionController extends Controller
         $petition->status=1;
         $petition->save();
         $petition->topic()->attach($petitionDetail["petitionTopic"]);
-        return to_route("petition.index");
+        return to_route("petition.edit",["petition"=>$petition->id])->with("error","You need to upload a banner yo your petition ! Otherwise it wont be seen by others");
     }
 
     /**
@@ -79,6 +80,12 @@ class PetitionController extends Controller
     public function show(string $id)
     {
         //
+        $petition=Petition::with("user","reason")->withCount("reason")->findOrFail($id);
+        $is_signed=SignedPetition::where("user_id",Auth::user()->id)->where("petition_id",$id)->exists();
+        return Inertia::render("Petition/PetitionDetail",[
+            "petition"=>$petition,
+            "is_signed"=>$is_signed
+        ]);
     }
 
     /**
@@ -130,8 +137,8 @@ class PetitionController extends Controller
     public function destroy(string $id)
     {
         //
-        // Petition::destroy($id);
-        return redirect()->route("user.petitions");
+        Petition::destroy($id);
+        return to_route("user.petitions")->with("success","Petition is deleted.");
     }
     function uploadBanner(Request $request){
         $request->file("file")->storeAs("public/petition_content/1","banner.jpg");

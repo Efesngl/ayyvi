@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SignPetitionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
@@ -21,4 +22,7 @@ Route::resource("/user",UserController::class)->only(["store","update"]);
 Route::prefix("/account")->middleware("auth")->group(function(){
     Route::singleton("/profile",ProfileController::class)->only(["show","update"]);
     Route::get("/mypetitions",[PetitionController::class,"userPetitions"])->name("user.petitions");
+});
+Route::prefix("/reason")->controller(SignPetitionController::class)->group(function(){
+    Route::post("/sign/{petition_id}","signPetition")->name("petition.sign");
 });

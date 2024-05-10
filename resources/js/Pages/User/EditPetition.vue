@@ -2,7 +2,7 @@
     <MainLayout>
         <div class="container h-auto">
             <h2 class="text-center">Kampanya düzenle</h2>
-            {{ $page.props.errors }}
+            <p class="text-white bg-danger w-100 p-3 rounded" v-if="$page.props.flash.error||petition.petition_banner==undefined">{{ ($page.props.flash.error)?$page.props.flash.error:errorMsg }}</p>
             <div class="row">
                 <div class="col-12 text-end">
                     <Link :href="route('user.petitions')" class="btn btn-danger">Geri git</Link>
@@ -49,12 +49,12 @@
                                         :true-value="2"
                                         :false-value="1"
                                         id="flexSwitchCheckChecked"
-                                        v-model="petition.statusChanged"
+                                        v-model="petition.status"
                                     />
                                     <label class="form-check-label" for="flexSwitchCheckChecked">Kampanya başarılı</label>
                                 </div>
                             </div>
-                            <div :class="{ 'col-6': petition.success != 3, 'col-12': petition.success == 3 }" v-if="petition.status != 1">
+                            <div :class="{ 'col-6': petition.status != 3, 'col-12': petition.status == 3 }" v-if="petition.status != 1">
                                 <p v-if="petition.status == 2" class="text-primary">Kampanya başarı durumu inceleniyor !</p>
                                 <p v-if="petition.status == 3" class="text-success">Kampanya başarısı onaylandı !</p>
                                 <p v-if="petition.status == 4" class="text-danger">Kampanya başarısı onaylanmadı !</p>
@@ -151,6 +151,7 @@ export default {
                 },
                 language: "tr",
             },
+            errorMsg:"You need to upload a banner yo your petition ! Otherwise it wont be seen by others"
         };
     },
     methods: {
@@ -168,11 +169,7 @@ export default {
         },
         deletePetition() {
             router.delete(route("petition.destroy", this.petition.id), {
-                onSuccess: async(event) => {
-                    const myModal = await new bootstrap.Modal("#delete-petition");
-                    document.body.classList.remove("modal-open")
-                    await myModal.hide();
-                },
+
             });
         },
     },
@@ -191,7 +188,6 @@ export default {
         Dropzone.discover();
     },
     beforeUnmount() {
-        console.log("exiting");
     },
     computed: {
         progress() {

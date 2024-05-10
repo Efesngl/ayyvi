@@ -10,7 +10,7 @@
                             </Link>
                         </li>
                         <li class="nav-item">
-                            <Link :href="route('user.petitions')" :class="{ active: route().current() == 'user.petition' }" class="nav-link browse-link" active-class="active"> Başlattığım kampanyalar </Link>
+                            <Link :href="route('user.petitions')" :class="{ active: route().current() == 'user.petitions' }" class="nav-link browse-link" active-class="active"> Başlattığım kampanyalar </Link>
                         </li>
                         <li class="nav-item">
                             <Link href="/hesabim/katildigimkampanyalar" class="nav-link browse-link" active-class="active"> Katıldığım kampanyalar </Link>

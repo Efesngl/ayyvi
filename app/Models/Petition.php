@@ -19,4 +19,7 @@ class Petition extends Model
     public function topic():BelongsToMany{
         return $this->belongsToMany(Topic::class,"topic_petition_pivot","petition_id","topic_id");
     }
+    public function reason():HasMany{
+        return $this->hasMany(SignedPetition::class,"petition_id","id");
+    }
 }

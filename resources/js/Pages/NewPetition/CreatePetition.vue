@@ -42,7 +42,11 @@ export default {
     methods:{
         createPetition(){
             this.routeLeave()
-            router.post(route("petition.store"),this.petition)
+            router.post(route("petition.store"),this.petition,{
+                onFinish: visit => {
+                    
+                },
+            })
         }
     }
 };
