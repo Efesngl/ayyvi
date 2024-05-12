@@ -16,7 +16,7 @@
                   <div class="progress-bar bg-danger" :style="{width:progress+'%'}"></div>
                 </div>
                 <div class="row mt-1">
-                  <div class="col"><span>{{petition.targetSign}}</span> imza hedefinden <span>{{petition.totalSigned }}</span> imzalandı</div>
+                  <div class="col"><span>{{petition.target_sign}}</span> imza hedefinden <span>{{petition.reason_count }}</span> imzalandı</div>
                 </div>
                 <slot name="browsepetitionCardButton"></slot>
   
@@ -35,7 +35,7 @@
       },
       computed:{
         progress(){
-          return (this.petition.totalSigned/this.petition.targetSign)*100
+          return (this.petition.reason_count/this.petition.target_sign)*100
         }
       }
     }

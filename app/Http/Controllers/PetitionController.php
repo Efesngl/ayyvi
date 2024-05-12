@@ -15,14 +15,39 @@ class PetitionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $petitions=Petition::has("reason",">",0)->whereNotNull("petition_banner")->paginate(10);
-        $topics=[];
+        $petitions=Petition::has("reason",">",0)
+        ->withCount("reason")
+        ->whereNotNull("petition_banner")
+        ->when($request->has("search"),function(Builder $b) use($request){
+            $b->where("petition_header","like","%{$request->input("search")}%");
+        })
+        ->when($request->has("topics"),function(Builder $b) use($request){
+            $b->whereHas("topic",function(Builder $b) use($request){
+                $b->whereIn("topic_id",$request->input("topics"));
+            });
+        })
+        ->when($request->has("type"),function(Builder $b) use($request){
+            switch ($request->input("type")){
+                case 1:
+                    $b->withCount("reason")->orderBy("reason_count","desc");
+                    break;
+                case 2:
+                    $b->orderBy("created_at","desc");
+                    break;
+                case 3:
+                    $b->where("status",3);
+                    break;
+            }
+        })
+        ->paginate(10);
+        $topics=Topic::all();
         return Inertia::render("Browse/Browse",[
             "petitions"=>$petitions,
-            "topics"=>$topics
+            "topics"=>$topics,
+            "url_query"=>$request->all()
         ]);
     }
 
@@ -82,9 +107,14 @@ class PetitionController extends Controller
         //
         $petition=Petition::with("user","reason")->withCount("reason")->findOrFail($id);
         $is_signed=SignedPetition::where("user_id",Auth::user()->id)->where("petition_id",$id)->exists();
+        $reasons=Petition::find($id)->reason()->with(["user"=>function(\Illuminate\Contracts\Database\Eloquent\Builder $b){
+            $b->select("name","id")->get();
+        }])->where("will_shown",true)->get();
         return Inertia::render("Petition/PetitionDetail",[
             "petition"=>$petition,
-            "is_signed"=>$is_signed
+            "content"=>$petition->getRawOriginal("petition_content"),
+            "is_signed"=>$is_signed,
+            "reasons"=>$reasons
         ]);
     }
 

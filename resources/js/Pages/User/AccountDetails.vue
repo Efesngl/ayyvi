@@ -21,7 +21,7 @@
                                     <label for="email">Eposta</label>
                                     <div class="row" v-if="form.errors.email">
                                         <div class="col-12">
-                                            <span>Eposta kısmı boş olamaz !</span>
+                                            <span>{{form.errors.email}}</span>
                                         </div>
                                     </div>
                                     <input type="text" v-model="form.email" name="email" class="form-control" id="email" />

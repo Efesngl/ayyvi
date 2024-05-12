@@ -9,7 +9,7 @@
                 <!-- <img :src="comment.userPP" class="petition-comment-user-logo" alt="" /> -->
               </div>
               <div class="col d-flex align-items-center">
-                <span>{{ comment.signer }}</span>
+                <span>{{ comment.user.name }}</span>
               </div>
             </div>
           </div>
@@ -37,15 +37,9 @@
 </template>
 
 <script>
-import { useUserStore } from '../stores/UserStore';
 export default {
   props: {
     comment: Object,
-  },
-  data(){
-    return {
-      user:useUserStore()
-    }
   },
   methods: {
     like(c) {

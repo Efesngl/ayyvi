@@ -56,7 +56,7 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-12 text-center">
-                        <Link href="/" class="btn btn-danger">Daha fazla kampanyaya göz gezdir</Link>
+                        <Link :href="route('petition.index')" class="btn btn-danger">Daha fazla kampanyaya göz gezdir</Link>
                     </div>
                 </div>
             </div>

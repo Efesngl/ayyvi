@@ -25,4 +25,5 @@ Route::prefix("/account")->middleware("auth")->group(function(){
 });
 Route::prefix("/reason")->controller(SignPetitionController::class)->group(function(){
     Route::post("/sign/{petition_id}","signPetition")->name("petition.sign");
+    Route::delete("/unsign/{petition_id}","unsignPetition")->name("petition.unsign");
 });

@@ -15,7 +15,7 @@
                     </div>
                     <div class="row mt-5">
                         <div class="col-12 fs-5">
-                            <span v-html="petition.petition_content"></span>
+                            <span v-html="content"></span>
                         </div>
                     </div>
                 </div>
@@ -187,20 +187,20 @@
                 </div>
             </div>
             <hr />
-            <!-- <div id="comments" v-if="signReasons.length > 0">
+            <div id="comments" v-if="reasons.length > 0">
                 <div class="row mt-3">
                     <div class="col-12">
                         <h2>Katılma nedenleri</h2>
                     </div>
                 </div>
-                <petitionCommentsCard v-for="signReason in signReasons" :comment="signReason"></petitionCommentsCard>
+                <petitionCommentsCard v-for="r in reasons" :comment="r"></petitionCommentsCard>
                 <div class="row">
                     <div class="col-12 text-center">
                         <button class="btn btn-danger w-50" @click="seeMoreComment">Daha fazla neden göster</button>
                     </div>
                 </div>
-            </div> -->
-            <div id="comments">
+            </div>
+            <div id="comments" v-else>
                 <div class="row mt-3">
                     <div class="col-12 text-center">
                         <h2>Bu kampanya için gösterilebilecek bir katılma nedeni yoktur</h2>
@@ -227,17 +227,20 @@
 <script>
 import { Link, router } from "@inertiajs/vue3";
 import MainLayout from "../../Layouts/MainLayout.vue";
-// import petitionCommentsCard from "../components/petitionCommentsCard.vue";
+import petitionCommentsCard from "../../Components/PetitionCommentsCard.vue";
 export default {
     components: {
         MainLayout,
         Link,
+        petitionCommentsCard
     },
     props: {
         petition: Object,
         reasons: Object,
         errors:Object,
         is_signed: Boolean,
+        content:String,
+        reasons:Object
     },
     data() {
         return {
@@ -251,7 +254,7 @@ export default {
     },
     computed: {
         SignProgress() {
-            return (this.petition.totalSigned / this.petition.targetSign) * 100;
+            return (this.petition.reason_count / this.petition.target_sign) * 100;
         },
         signReasonReaminingWord() {
             return 100 - this.signReason.reason.length;
@@ -269,6 +272,17 @@ export default {
                 }
             });
         },
+        unsignPetition(){
+            router.delete(route("petition.unsign", this.petition.id),{
+                onError:error=>{
+                    const toastEl = new bootstrap.Toast(this.$refs.toast, {
+                            autohide: true,
+                            delay: 3000,
+                        });
+                        toastEl.show();
+                }
+            });
+        }
     },
 };
 </script>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class ProfileController extends Controller
@@ -52,7 +53,11 @@ class ProfileController extends Controller
         //
         $data=$request->validate([
             "name"=>"required",
-            "email"=>"required|email",
+            'email' => [
+                'required',
+                "email",
+                Rule::unique('users')->ignore($request->user()->id),
+            ],
             "password"=>"nullable"
         ]);
         $user=User::find($request->user()->id);

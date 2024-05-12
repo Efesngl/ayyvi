@@ -11,9 +11,10 @@ class HomeController extends Controller
     //
     public function index(){
         $sp=Petition::where("status",3)->get();
+        $pp=Petition::withCount("reason")->orderBy("reason_count","desc")->get();
         return Inertia::render("Home",[
             "succededPetitions"=>$sp,
-            "popularPetitions"=>[]
+            "popularPetitions"=>$pp
         ]);
     }
 }
