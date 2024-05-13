@@ -17,8 +17,8 @@
           <div class="row p-1" v-if="$page.props.user">
             <div class="col-12">
               <span v-auto-animate>
-                <i class="bi bi-heart-fill text-danger" @click="unlike(comment)" v-if="comment.isLiked"></i>
-                <i class="bi bi-heart" @click="like(comment)" v-else></i>
+                <!-- <i class="bi bi-heart-fill text-danger" @click="unlike(comment)" v-if="comment.isLiked"></i> -->
+                <i class="bi bi-heart" @click.prevent="like($event)"></i>
                 {{ comment.likes }}
               </span>
             </div>
@@ -37,43 +37,43 @@
 </template>
 
 <script>
+import { router } from '@inertiajs/vue3';
+
 export default {
   props: {
     comment: Object,
   },
   methods: {
-    like(c) {
-      let data={
-        reasonID:this.comment.reason_id
-      }
-      if(this.user.isLogged){
-        data.userID=this.user.ID
-      }
-      this.$axios({
-        method:"post",
-        url:"/petitions/likesignreason",
-        data:data
-      }).then(res=>{
-        c.isLiked = true;
-        c.likes++;
+    async like(event) {
+      event.preventDefault()
+      let f=await fetch(route("petition.reason.like",this.comment.petition_id),{
+        method:"PATCH",
+        headers:{
+          "X-CSRF-TOKEN":this.$page.props.csrf_token,
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          reason_id:this.comment.id
+        })
       })
+      this.comment.likes++
     },
-    unlike(c) {
-      let data={
-        reasonID:this.comment.reason_id
-      }
-      if(this.user.isLogged){
-        data.userID=this.user.ID
-      }
-      this.$axios({
-        method:"post",
-        url:"/petitions/unlikesignreason",
-        data:data
-      }).then(res=>{
-        c.isLiked = false;
-        c.likes--;
-      })
-    },
+    // unlike(c) {
+    //   let data={
+    //     reasonID:this.comment.reason_id
+    //   }
+    //   if(this.user.isLogged){
+    //     data.userID=this.user.ID
+    //   }
+    //   this.$axios({
+    //     method:"post",
+    //     url:"/petitions/unlikesignreason",
+    //     data:data
+    //   }).then(res=>{
+    //     c.isLiked = false;
+    //     c.likes--;
+    //   })
+    // },
   },
 };
 </script>

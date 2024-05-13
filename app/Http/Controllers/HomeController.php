@@ -14,7 +14,8 @@ class HomeController extends Controller
         $pp=Petition::withCount("reason")->orderBy("reason_count","desc")->get();
         return Inertia::render("Home",[
             "succededPetitions"=>$sp,
-            "popularPetitions"=>$pp
+            "popularPetitions"=>$pp,
+            "petitionCount"=>Petition::count()
         ]);
     }
 }

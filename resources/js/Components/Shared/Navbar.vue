@@ -12,7 +12,7 @@
                         <Link class="nav-links" :href="route('petition.create')" :class="{'active-navbar':route().current()=='petition.create'}"> Kampanya başlat</Link>
                     </li>
                     <li><Link class="nav-links" :href="route('petition.index')" :class="{'active-navbar':route().current()=='petition.index'}"> Göz at</Link></li>
-                    <li><Link class="nav-links" href="/bagis"> Bağışçı ol</Link></li>
+                    <li><Link class="nav-links" :href="route('donate')" :class="{'active-navbar':route().current()=='donate'}"> Bağışçı ol</Link></li>
                 </ul>
             </div>
             <div id="user-links" v-if="user==null">
