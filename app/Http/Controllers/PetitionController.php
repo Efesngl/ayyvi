@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Petition;
 use App\Models\SignedPetition;
 use App\Models\Topic;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use \Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 
 class PetitionController extends Controller
 {
@@ -176,6 +178,14 @@ class PetitionController extends Controller
     function userPetitions(){
         $petitions=Petition::where("creator",Auth::user()->id)->get();
         return Inertia::render("User/UserPetitions",[
+            "petitions"=>$petitions
+        ]);
+    }
+    public function signedPetitions(){
+        $petitions=Petition::withCount("reason")->whereHas("signedUsers",function(Builder $b){
+            $b->where("user_id",Auth::user()->id);
+        })->get();
+        return Inertia::render("User/SignedPetitions",[
             "petitions"=>$petitions
         ]);
     }

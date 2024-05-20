@@ -38,8 +38,8 @@ class DonationController extends Controller
     public function store(Request $request)
     {
 
-        $month = Carbon::now()->addMonth()->month;
         $year = Carbon::now()->year;
+        $month = ($request->input("card.cardExp.y")>$year)?1:Carbon::now()->addMonth()->month;
         $validated_request = $request->validate([
             "card.cardHolder" => "required|string|",
             "card.cardNumber" => "required|max:19|regex:'^(?:\d{4}\s?){3}\d{4}$'",

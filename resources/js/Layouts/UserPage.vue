@@ -5,18 +5,18 @@
                 <div class="col-12">
                     <ul class="nav nav-tabs justify-content-center">
                         <li class="nav-item">
-                            <Link :href="route('profile.show')" :class="{ active: route().current() == 'profile.show' }" class="nav-link browse-link" active-class="active">
+                            <Link :href="route('profile.show')" :class="{ active: route().current() == 'profile.show' }" class="nav-link browse-link">
                                 Hesap detayları
                             </Link>
                         </li>
                         <li class="nav-item">
-                            <Link :href="route('user.petitions')" :class="{ active: route().current() == 'user.petitions' }" class="nav-link browse-link" active-class="active"> Başlattığım kampanyalar </Link>
+                            <Link :href="route('user.petitions')" :class="{ active: route().current() == 'user.petitions' }" class="nav-link browse-link"> Başlattığım kampanyalar </Link>
                         </li>
                         <li class="nav-item">
-                            <Link href="/hesabim/katildigimkampanyalar" class="nav-link browse-link" active-class="active"> Katıldığım kampanyalar </Link>
+                            <Link :href="route('user.signedpetitions')" class="nav-link browse-link" :class="{ active: route().current() == 'user.signedpetitions' }"> Katıldığım kampanyalar </Link>
                         </li>
                         <li class="nav-item">
-                            <Link :href="route('user.donations')" :class="{ active: route().current() == 'user.donations' }" class="nav-link browse-link" active-class="active"> Yaptığım bağışlar </Link>
+                            <Link :href="route('user.donations')" :class="{ active: route().current() == 'user.donations' }" class="nav-link browse-link"> Yaptığım bağışlar </Link>
                         </li>
                     </ul>
                 </div>

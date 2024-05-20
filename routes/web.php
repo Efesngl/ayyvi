@@ -26,6 +26,7 @@ Route::resource("/user",UserController::class)->only(["store","update"]);
 Route::prefix("/account")->middleware("auth")->group(function(){
     Route::singleton("/profile",ProfileController::class)->only(["show","update"]);
     Route::get("/mypetitions",[PetitionController::class,"userPetitions"])->name("user.petitions");
+    Route::get("/signedpetitions",[PetitionController::class,"signedPetitions"])->name("user.signedpetitions");
     Route::get("/mydonations",[DonationController::class,"index"])->name("user.donations");
 });
 Route::prefix("/reason")->controller(SignPetitionController::class)->group(function(){

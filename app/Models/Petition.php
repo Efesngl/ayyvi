@@ -23,11 +23,19 @@ class Petition extends Model
     public function reason():HasMany{
         return $this->hasMany(SignedPetition::class,"petition_id","id");
     }
+    public function signedUsers():BelongsToMany{
+        return $this->belongsToMany(User::class,"signed_petitions","petition_id","user_id");
+    }
 
     protected function petitionContent(): Attribute
     {
         return Attribute::make(
             get: fn (string $value) => substr(strip_tags($value),0,97)."...",
+        );
+    }
+    public function createdAt():Attribute{
+        return Attribute::make(
+            get: fn (string $value) => date_format(new \DateTime($value),"d.m.Y H:i:s"),
         );
     }
 }

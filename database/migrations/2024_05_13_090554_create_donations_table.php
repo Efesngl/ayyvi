@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer("user_id");
+            $table->unsignedBigInteger("user_id");
             $table->integer("amount");
             $table->foreign("user_id")->references("id")->on("users");
         });
