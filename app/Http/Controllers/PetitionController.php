@@ -106,7 +106,7 @@ class PetitionController extends Controller
     {
         //
         $petition=Petition::with("user","reason")->withCount("reason")->findOrFail($id);
-        $is_signed=SignedPetition::where("user_id",Auth::user()->id)->where("petition_id",$id)->exists();
+        $is_signed=(!is_null(Auth::user()))?SignedPetition::where("user_id",Auth::user()->id)->where("petition_id",$id)->exists():null;
         $reasons=Petition::find($id)->reason()->with(["user"=>function(\Illuminate\Contracts\Database\Eloquent\Builder $b){
             $b->select("name","id")->get();
         }])->where("will_shown",true)->get();

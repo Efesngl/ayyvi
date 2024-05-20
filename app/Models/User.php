@@ -48,4 +48,7 @@ class User extends Authenticatable
     public function petitions():HasMany{
         return $this->hasMany(Petition::class,"creator","id");
     }
+    public function donation():HasMany{
+        return $this->hasMany(Donation::class,"user_id","id");
+    }
 }

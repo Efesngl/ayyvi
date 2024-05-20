@@ -16,7 +16,7 @@
                             <Link href="/hesabim/katildigimkampanyalar" class="nav-link browse-link" active-class="active"> Katıldığım kampanyalar </Link>
                         </li>
                         <li class="nav-item">
-                            <Link href="/hesabim/yaptigimbagislar" class="nav-link browse-link" active-class="active"> Yaptığım bağışlar </Link>
+                            <Link :href="route('user.donations')" :class="{ active: route().current() == 'user.donations' }" class="nav-link browse-link" active-class="active"> Yaptığım bağışlar </Link>
                         </li>
                     </ul>
                 </div>

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->integer("user_id");
             $table->integer("amount");
-            $table->foreign("user_id")->references("users")->on("id");
+            $table->foreign("user_id")->references("id")->on("users");
         });
     }
 

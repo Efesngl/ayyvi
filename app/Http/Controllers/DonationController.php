@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Donation;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DonationController extends Controller
@@ -13,6 +17,10 @@ class DonationController extends Controller
     public function index()
     {
         //
+        $donations=Donation::where("user_id",Auth::user()->id)->get();
+        return Inertia::render("User/Donations",[
+            "donations"=>$donations
+        ]);
     }
 
     /**
@@ -29,15 +37,33 @@ class DonationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $month = Carbon::now()->addMonth()->month;
+        $year = Carbon::now()->year;
+        $validated_request = $request->validate([
+            "card.cardHolder" => "required|string|",
+            "card.cardNumber" => "required|max:19|regex:'^(?:\d{4}\s?){3}\d{4}$'",
+            "card.cardExp.m" => "required|integer|between:1,12|min:{$month}",
+            "card.cardExp.y" => "required|integer|min:{$year}",
+            "card.cardCvv" => "required|integer|min:001|max:999|digits:3",
+            "amount" => "required|integer|min:1"
+        ]);
+        $dontaion = Donation::create([
+            "user_id" => $request->user()->id,
+            "amount" => $validated_request["amount"]
+        ]);
+        if ($dontaion) {
+            return to_route("donate.status",["status"=>"success"]);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
         //
+
     }
 
     /**
@@ -62,5 +88,14 @@ class DonationController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function status(Request $request,$status)
+    {
+        if($request->header("referer")!="http://127.0.0.1:8000/donate/create"){
+            return to_route("donate.create");
+        }
+        return Inertia::render("Donation/DonationStatus", [
+            "status" => $status
+        ]);
     }
 }
