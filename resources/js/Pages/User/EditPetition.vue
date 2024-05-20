@@ -73,9 +73,6 @@
                                 <label for="petition-location ">Kampanya resmi</label><br />
                                 <input type="file" name="file" @input="petition.petition_banner = $event.target.files[0]" id="petition-banner" accept="image/*" />
                             </div>
-                            <div class="col-3">
-                                <img :src="petition.petition_banner" alt="" />
-                            </div>
                         </div>
 
                         <div class="row">

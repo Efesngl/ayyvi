@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Petition extends Model
 {
@@ -36,6 +37,11 @@ class Petition extends Model
     public function createdAt():Attribute{
         return Attribute::make(
             get: fn (string $value) => date_format(new \DateTime($value),"d.m.Y H:i:s"),
+        );
+    }
+    public function petitionBanner():Attribute{
+        return Attribute::make(
+            get: fn ($value) => (!is_null($value))?Storage::temporaryUrl($value,now()->addMinutes(2)):null,
         );
     }
 }

@@ -10,7 +10,7 @@
                 <div class="col-12 col-md-8" id="petitionContent">
                     <div class="row">
                         <div class="col-12">
-                            <img :src="'/' + petition.petition_banner" class="w-100 h-100" style="object-fit: fill" alt="" />
+                            <img :src="petition.petition_banner" class="w-100 h-100" style="object-fit: fill" alt="" />
                         </div>
                     </div>
                     <div class="row mt-5">

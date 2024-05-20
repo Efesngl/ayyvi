@@ -136,7 +136,7 @@
                         </div>
                         <BrowsepetitionCard v-for="petition in petitions.data" :petition="petition" v-if="petitions.total > 0">
                             <template v-slot:browsepetitionCardImage>
-                                <img :src="'/' + petition.petition_banner" class="w-100 h-100 rounded-start" style="object-fit: fill" alt="..." />
+                                <img :src="petition.petition_banner" class="w-100 h-100 rounded-start" style="object-fit: fill" alt="..." />
                             </template>
                             <template v-slot:browsepetitionCardHeader>
                                 <h5 class="card-title">{{ petition.petition_header }}</h5>
