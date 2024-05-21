@@ -3,7 +3,7 @@
         <div class="container h-auto min-vh-100" v-if="petitions.length > 0">
             <JoinedPetitionsCard v-for="p in petitions" :totalSigned="p.reason_count" :targetSign="p.target_sign">
                 <template v-slot:browsepetitionCardImage>
-                    <img :src="'/' + p.petition_banner" class="w-100 h-100 rounded-start" style="object-fit: fill" alt="..." />
+                    <img :src="p.petition_banner" class="w-100 h-100 rounded-start" style="object-fit: fill" alt="..." />
                 </template>
                 <template v-slot:browsepetitionCardHeader>
                     <h5 class="card-title">{{ p.petition_header }}</h5>

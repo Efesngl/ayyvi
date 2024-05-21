@@ -15,10 +15,13 @@ class StatusSeeder extends Seeder
     {
         //
         DB::table("petition_statuses")->insert([
-            ["status" => "Onay bekleniyor"], 
-            ["status" => "Başarı onayı bekleniyor"], 
-            ["status" => "Başarı onaylandı"],
-            ["status"=>"Başarı onaylanmadı"]
+            ["status" => "waiting for approval"], 
+            ["status" => "approved"], 
+            ["status" => "disapproved"], 
+            ["status" => "waiting for success approval"], 
+            ["status" => "success approved"],
+            ["status"=>"success disapproved"],
+            ["status"=>"blocked"],
         ]);
     }
 }

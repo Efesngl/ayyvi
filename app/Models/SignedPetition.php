@@ -14,7 +14,7 @@ class SignedPetition extends Model
     protected $fillable=["id","user_id","petition_id","likes","reason","will_shown"];
 
     public function petition():BelongsTo{
-        return $this->belongsTo(Petition::class,"id","petition_id");
+        return $this->belongsTo(Petition::class,"petition_id","id");
     }
     public function user():BelongsTo{
         return $this->belongsTo(User::class,"user_id","id");

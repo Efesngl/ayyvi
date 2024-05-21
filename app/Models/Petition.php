@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class Petition extends Model
 {
     use HasFactory;
-    protected $fillable=["petition_header","petition_content","petition_banner","creator","target_sign","status"];
+    protected $fillable=["petition_header","petition_content","petition_banner","creator","target_sign","status_id"];
 
     public function user():BelongsTo{
         return $this->belongsTo(User::class,"creator","id");
@@ -27,7 +27,9 @@ class Petition extends Model
     public function signedUsers():BelongsToMany{
         return $this->belongsToMany(User::class,"signed_petitions","petition_id","user_id");
     }
-
+    public function status():BelongsTo{
+        return $this->belongsTo(PetitionStatus::class,"status_id","id");
+    }
     protected function petitionContent(): Attribute
     {
         return Attribute::make(

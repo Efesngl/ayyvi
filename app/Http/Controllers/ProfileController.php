@@ -58,13 +58,17 @@ class ProfileController extends Controller
                 "email",
                 Rule::unique('users')->ignore($request->user()->id),
             ],
-            "password"=>"nullable"
+            "password"=>"nullable",
+            'pp' =>"file|nullable"
         ]);
         $user=User::find($request->user()->id);
         $user->name=$data["name"];
         $user->email=$data["email"];
         if(!is_null($data["password"])){
             $user->password=$data["password"];
+        }
+        if(!is_null($data["pp"])){
+            $user->profile_photo=$request->file("pp")->storeAs("user_content/{$user->id}","profile_photo.jpeg");
         }
         $user->update();
         return response("",200);

@@ -24,7 +24,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-2">
-                                <!-- <img :src="petition.userPP" class="petition-creator-logo" alt="" /> -->
+                                <img :src="petition.user.profile_photo" class="petition-creator-logo" alt="" />
                             </div>
                             <div class="col-10 fs-5 d-flex align-items-center">
                                 <span>{{ petition.user.name }}</span>

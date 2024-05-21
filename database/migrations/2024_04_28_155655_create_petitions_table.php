@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('petition_banner')->nullable();
             $table->integer('creator')->index('creator');
             $table->integer('target_sign');
-            $table->unsignedBigInteger("status")->nullable();
+            $table->unsignedBigInteger("status_id")->nullable();
         });
     }
 

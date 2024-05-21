@@ -111,8 +111,8 @@ class PetitionController extends Controller
         $petition = Petition::with("user", "reason")->withCount("reason")->findOrFail($id);
         $is_signed = (!is_null(Auth::user())) ? SignedPetition::where("user_id", Auth::user()->id)->where("petition_id", $id)->exists() : null;
         $reasons = Petition::find($id)->reason()->with([
-            "user" => function (\Illuminate\Contracts\Database\Eloquent\Builder $b) {
-                $b->select("name", "id")->get();
+            "user" => function (EloquentBuilder $b) {
+                $b->select("name", "id","profile_photo")->get();
             }
         ])->where("will_shown", true)->get();
         return Inertia::render("Petition/PetitionDetail", [
@@ -130,7 +130,7 @@ class PetitionController extends Controller
     {
         //
         $petition = Petition::with([
-            "topic" => function (\Illuminate\Contracts\Database\Eloquent\Builder $b) {
+            "topic" => function (EloquentBuilder $b) {
                 $b->select("topic_id");
             }
         ])->findOrFail($id);
@@ -154,7 +154,7 @@ class PetitionController extends Controller
             ],
             "target_sign" => "required|integer|min:10",
             "petition_banner" => "nullable",
-            "status" => "required"
+            "status_id" => "required"
         ]);
         $p = Petition::find($id);
         $p->petition_header = $petition["petition_header"];
@@ -163,7 +163,7 @@ class PetitionController extends Controller
             $p->petition_banner = $request->file("petition_banner")->storeAs("petition_content/{$id}", "banner.jpg");
         }
         $p->target_sign = $petition["target_sign"];
-        $p->status = $petition["status"];
+        $p->status_id = $petition["status_id"];
         $p->topic()->sync([$petition["topic"][0]["topic_id"]]);
         $p->save();
     }

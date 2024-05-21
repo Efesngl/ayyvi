@@ -33,6 +33,15 @@
                                             <i class="bi bi-eye" v-else></i>
                                         </button>
                                     </div>
+                                    <label for="profile-photo-upload">Upload a profile photo</label>
+                                    <div class="row">
+                                        <div class="col-9 d-flex align-items-center">
+                                            <input type="file" @input="form.pp = $event.target.files[0]" class="form-control" accept="image/*" name="profile-photo" id="profile-photo-upload">
+                                        </div>
+                                        <div class="col-3">
+                                            <span><img :src="user.profile_photo" class="w-100 h-100 rounded"t=""></span>
+                                        </div>
+                                    </div>
                                     <button class="btn btn-danger border w-100 mt-2" id="login-button" @click="submitForm">Kaydet</button>
                                 </div>
                             </div>
@@ -69,15 +78,17 @@ export default {
                 isPassShowing: false,
             },
             form: useForm({
+                _method:"patch",
                 name: this.user.name,
                 email: this.user.email,
                 password: null,
+                pp:null
             }),
         };
     },
     methods: {
         submitForm() {
-            this.form.patch(route("profile.update"), {
+            this.form.post(route("profile.update"), {
                 onSuccess: () => {
                     const toastEl = new bootstrap.Toast(this.$refs.toast, {
                         autohide: true,

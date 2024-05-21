@@ -40,7 +40,7 @@
                         </div>
                         <span>{{ petition.totalSigned }} kişi imzaladı</span>
                         <div class="row mt-2 mb-3">
-                            <div class="col-6" v-if="petition.status != 3">
+                            <div class="col-6" v-if="petition.status_id != 3">
                                 <div class="form-check form-switch">
                                     <input
                                         class="form-check-input"
@@ -49,15 +49,15 @@
                                         :true-value="2"
                                         :false-value="1"
                                         id="flexSwitchCheckChecked"
-                                        v-model="petition.status"
+                                        v-model="petition.status_id"
                                     />
                                     <label class="form-check-label" for="flexSwitchCheckChecked">Kampanya başarılı</label>
                                 </div>
                             </div>
-                            <div :class="{ 'col-6': petition.status != 3, 'col-12': petition.status == 3 }" v-if="petition.status != 1">
-                                <p v-if="petition.status == 2" class="text-primary">Kampanya başarı durumu inceleniyor !</p>
-                                <p v-if="petition.status == 3" class="text-success">Kampanya başarısı onaylandı !</p>
-                                <p v-if="petition.status == 4" class="text-danger">Kampanya başarısı onaylanmadı !</p>
+                            <div :class="{ 'col-6': petition.status_id != 5, 'col-12': petition.status_id == 5 }" v-if="petition.status_id != 1">
+                                <p v-if="petition.status_id == 2" class="text-primary">Kampanya başarı durumu inceleniyor !</p>
+                                <p v-if="petition.status_id == 3" class="text-success">Kampanya başarısı onaylandı !</p>
+                                <p v-if="petition.status_id == 4" class="text-danger">Kampanya başarısı onaylanmadı !</p>
                             </div>
                         </div>
                         <div class="row d-block d-md-none">
