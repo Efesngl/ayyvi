@@ -6,16 +6,16 @@
                 <a href="/"><img src="/assets/img/logo/png/lb.png" id="logo" alt="" /></a>
                 <ul>
                     <li>
-                        <Link class="nav-links" :class="{'active-navbar':route().current()=='home'}" href="/"> Ana Sayfa</Link>
+                        <Link class="nav-links" :class="{ 'active-navbar': route().current() == 'home' }" href="/"> Ana Sayfa</Link>
                     </li>
                     <li>
-                        <Link class="nav-links" :href="route('petition.create')" :class="{'active-navbar':route().current()=='petition.create'}"> Kampanya başlat</Link>
+                        <Link class="nav-links" :href="route('petition.create')" :class="{ 'active-navbar': route().current() == 'petition.create' }"> Kampanya başlat</Link>
                     </li>
-                    <li><Link class="nav-links" :href="route('petition.index')" :class="{'active-navbar':route().current()=='petition.index'}"> Göz at</Link></li>
-                    <li><Link class="nav-links" :href="route('donate.create')" :class="{'active-navbar':route().current()=='donate.create'}"> Bağışçı ol</Link></li>
+                    <li><Link class="nav-links" :href="route('petition.index')" :class="{ 'active-navbar': route().current() == 'petition.index' }"> Göz at</Link></li>
+                    <li><Link class="nav-links" :href="route('donate.create')" :class="{ 'active-navbar': route().current() == 'donate.create' }"> Bağışçı ol</Link></li>
                 </ul>
             </div>
-            <div id="user-links" v-if="user==null">
+            <div id="user-links" v-if="user == null">
                 <div class="dropdown">
                     <i class="bi bi-person-circle" id="user-logo" role="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
                     <ul class="dropdown-menu">
@@ -37,22 +37,16 @@
     </nav>
 
     <!-- offcanvas navbar -->
-    <!-- <nav class="d-block d-md-none">
+    <nav class="d-block d-md-none">
         <div id="navbar">
             <div id="site-links">
-                <Link href="/"><img src="/assets/img/logo/png/lb.png" id="logo" alt="" /></Link>
+                <Link :href="route('home')"><img src="/assets/img/logo/png/lb.png" id="logo" alt="" /></Link>
             </div>
             <div class="user-links d-flex align-items-center">
                 <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasmenu" aria-controls="offcanvasmenu">
                     <i class="bi bi-list fs-1"></i>
                 </button>
-                <div
-                    ref="offCanvas"
-                    class="offcanvas offcanvas-start bg-danger text-white"
-                    tabindex="-1"
-                    id="offcanvasmenu"
-                    aria-labelledby="offcanvasmenu"
-                >
+                <div ref="offCanvas" class="offcanvas offcanvas-start bg-danger text-white" tabindex="-1" id="offcanvasmenu" aria-labelledby="offcanvasmenu">
                     <div class="offcanvas-header">
                         <h2 class="offcanvas-title" id="offcanvasExampleLabel">Menü</h2>
                         <button type="button" class="btn-close text-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -60,13 +54,13 @@
                     <hr />
                     <div class="offcanvas-body d-flex flex-column justify-content-between">
                         <div id="site-links-offcanvas" class="d-flex flex-column">
-                            <a href="/" class="navbar-offcanvas-links text-decoration-none fs-1" active-class="active-navbar-offcanvas">Ana Sayfa</a>
-                            <a href="/kampanyabaslat" class="navbar-offcanvas-links text-decoration-none fs-1" active-class="active-navbar-offcanvas">Kampanya başlat</a>
-                            <a href="/gozat" class="navbar-offcanvas-links text-decoration-none fs-1" active-class="active-navbar-offcanvas">Kampanyalara göz at</a>
-                            <a href="/bagis" class="navbar-offcanvas-links text-decoration-none fs-1" active-class="active-navbar-offcanvas">Bağış</a>
+                            <Link :href="route('home')" class="navbar-offcanvas-links text-decoration-none fs-1" active-class="active-navbar-offcanvas">Ana Sayfa</Link>
+                            <Link :href="route('petition.create')" class="navbar-offcanvas-links text-decoration-none fs-1" active-class="active-navbar-offcanvas">Kampanya başlat</Link>
+                            <Link :href="route('petition.index')" class="navbar-offcanvas-links text-decoration-none fs-1" active-class="active-navbar-offcanvas">Kampanyalara göz at</Link>
+                            <Link :href="route('donate.create')" class="navbar-offcanvas-links text-decoration-none fs-1" active-class="active-navbar-offcanvas">Bağış</Link>
                         </div>
                         <div id="user-links-offcavnas">
-                            <div class="row fs-1" v-if="user==null">
+                            <div class="row fs-1" v-if="user == null">
                                 <div class="col-5"><a :href="route('login')" class="text-decoration-none text-white">Giriş yap</a></div>
                                 <div class="col-2 text-center"><span>/</span></div>
                                 <div class="col-5 text-end">
@@ -76,9 +70,8 @@
 
                             <div class="row fs-1" v-else>
                                 <div class="col-8">
-                                    <a href="/hesabim/hesapdetaylari" class="text-decoration-none text-white"
-                                        ><i class="bi bi-person-circle"></i
-                                        ><span> {{ user.name }}</span></a
+                                    <Link :href="route('profile.show')" class="text-decoration-none text-white"
+                                        ><i class="bi bi-person-circle"></i><span> {{ user.name }}</span></Link
                                     >
                                 </div>
                                 <div class="col-4 text-end">
@@ -90,27 +83,27 @@
                 </div>
             </div>
         </div>
-    </nav> -->
+    </nav>
     <!-- offcanvas navbar end -->
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3'
-import { usePage } from '@inertiajs/vue3';
+import { Link } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 export default {
-    components:{
+    components: {
         Link,
     },
-    computed:{
-        user(){
-            return this.page.props.user
-        }
+    computed: {
+        user() {
+            return this.page.props.user;
+        },
     },
-    data(){
+    data() {
         return {
-            page: usePage()
-        }
-    }
+            page: usePage(),
+        };
+    },
     // props:{
     //     user:Object
     // }
@@ -121,11 +114,11 @@ export default {
 .active-navbar {
     color: var(--dark-red) !important;
 }
-.active-navbar-offcanvas{
-  color: var(--bs-dark) !important;
+.active-navbar-offcanvas {
+    color: var(--bs-dark) !important;
 }
-.navbar-offcanvas-links{
-  color: var(--bs-white);
+.navbar-offcanvas-links {
+    color: var(--bs-white);
 }
 #navbar {
     border: 1px solid rgba(0, 0, 0, 0.1);
