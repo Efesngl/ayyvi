@@ -16,4 +16,9 @@ class EditPetition extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if(is_null($data["petition_banner"])) unset($data["petition_banner"]);
+        return $data;
+    }
 }

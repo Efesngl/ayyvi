@@ -21,9 +21,10 @@ class PetitionController extends Controller
     public function index(Request $request)
     {
         //
-        $petitions = Petition::has("reason", ">", 0)
+        $petitions = Petition::has("reason", "=", 0)
             ->withCount("reason")
             ->whereNotNull("petition_banner")
+            
             ->when($request->has("search"), function (Builder $b) use ($request) {
                 $b->where("petition_header", "like", "%{$request->input("search")}%");
             })
@@ -41,9 +42,12 @@ class PetitionController extends Controller
                         $b->orderBy("created_at", "desc");
                         break;
                     case 3:
-                        $b->where("status", 3);
+                        $b->where("status_id", 5);
                         break;
                 }
+            })
+            ->when(!$request->has("type")||$request->input("type")!=3,function(Builder $b){
+                $b->whereIn("status_id",[2,6]);
             })
             ->paginate(10);
         $topics = Topic::all();
@@ -96,10 +100,10 @@ class PetitionController extends Controller
         $petition->petition_content = $petitionDetail["petitionContent"];
         $petition->creator = $petitionDetail["creator"];
         $petition->target_sign = $petitionDetail["targetSign"];
-        $petition->status = 1;
+        $petition->status_id = 1;
         $petition->save();
         $petition->topic()->attach($petitionDetail["petitionTopic"]);
-        return to_route("petition.edit", ["petition" => $petition->id])->with("error", "You need to upload a banner yo your petition ! Otherwise it wont be seen by others");
+        return to_route("user.petitions")->with("message", "You will receive an email when your petition is approved");
     }
 
     /**
@@ -109,6 +113,9 @@ class PetitionController extends Controller
     {
         //
         $petition = Petition::with("user", "reason")->withCount("reason")->findOrFail($id);
+        if(in_array($petition->status_id,[1,3,7])){
+            abort(404);
+        }
         $is_signed = (!is_null(Auth::user())) ? SignedPetition::where("user_id", Auth::user()->id)->where("petition_id", $id)->exists() : null;
         $reasons = Petition::find($id)->reason()->with([
             "user" => function (EloquentBuilder $b) {
@@ -134,6 +141,8 @@ class PetitionController extends Controller
                 $b->select("topic_id");
             }
         ])->findOrFail($id);
+        $petition["status"]=$petition->status_id;
+        if(in_array($petition->status_id,[1,3,7])) return to_route("user.petitions");
         return Inertia::render("User/EditPetition", [
             "petition" => $petition,
             "topics" => Topic::all(),
@@ -154,7 +163,7 @@ class PetitionController extends Controller
             ],
             "target_sign" => "required|integer|min:10",
             "petition_banner" => "nullable",
-            "status_id" => "required"
+            "status" => "required"
         ]);
         $p = Petition::find($id);
         $p->petition_header = $petition["petition_header"];
@@ -163,7 +172,7 @@ class PetitionController extends Controller
             $p->petition_banner = $request->file("petition_banner")->storeAs("petition_content/{$id}", "banner.jpg");
         }
         $p->target_sign = $petition["target_sign"];
-        $p->status_id = $petition["status_id"];
+        $p->status_id = $petition["status"];
         $p->topic()->sync([$petition["topic"][0]["topic_id"]]);
         $p->save();
     }
@@ -188,14 +197,16 @@ class PetitionController extends Controller
     }
     function userPetitions()
     {
-        $petitions = Petition::where("creator", Auth::user()->id)->get();
+        $petitions = Petition::where("creator", Auth::user()->id)->with("status")->orderBy("created_at","desc")->get();
+        $does_user_have_null_pb=Petition::where("creator",Auth::user()->id)->whereIn("status_id",[2,4,6])->whereNull("petition_banner")->select("id","petition_header")->get();
         return Inertia::render("User/UserPetitions", [
-            "petitions" => $petitions
+            "petitions" => $petitions,
+            "null_pb"=>$does_user_have_null_pb
         ]);
     }
     public function signedPetitions()
     {
-        $petitions = Petition::withCount("reason")->whereHas("signedUsers", function (Builder $b) {
+        $petitions = Petition::withCount("reason")->whereIn("status_id",[2,4,6])->whereHas("signedUsers", function (Builder $b) {
             $b->where("user_id", Auth::user()->id);
         })->get();
         return Inertia::render("User/SignedPetitions", [

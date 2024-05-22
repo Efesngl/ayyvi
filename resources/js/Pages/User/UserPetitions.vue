@@ -1,6 +1,17 @@
 <template>
     <UserPage>
         <div class="container h-auto min-vh-100" v-if="petitions.length > 0">
+            <div class="alert alert-primary" v-if="$page.props.flash.message" role="alert">
+                <i class="bi bi-info-circle-fill"></i> Your petition needs to be approved. When approved you will receive an email.
+            </div>
+            <div class="alert alert-danger" v-if="null_pb.length > 0" role="alert">
+                <i class="bi bi-info-circle-fill"></i>You have a petitions that doesnt have any banner. Petitions like these cant be seen by others.
+                <br>
+                <h6>These petitions are :</h6>
+                <ul>
+                    <Link v-for="npb in null_pb" :href="route('petition.edit',npb.id)"><li>{{ npb.petition_header }}</li></Link>
+                </ul>
+            </div>
             <JoinedpetitionsCard v-for="p in petitions" :totalSigned="p.total_signed" :targetSign="p.target_sign">
                 <template v-slot:browsepetitionCardImage>
                     <img :src="p.petition_banner" class="w-100 h-100 rounded-start" style="object-fit: fill" alt="..." />
@@ -14,12 +25,22 @@
                     </p>
                 </template>
                 <template v-slot:browsepetitionCardButton>
-                    <div class="row mt-2">
+                    <div class="row">
+                        <div class="col-12">
+                            <span class="text-capitalize" :class="{'text-danger':p.status_id==3||p.status_id==7,'text-primary':p.status_id!=3}">{{ p.status.status }}</span>
+                        </div>
+                    </div>
+                    <div class="row mt-2" v-if="p.status_id != 3 && p.status_id != 1 && p.status_id!=7">
                         <div class="col-6 text-center">
                             <Link :href="route('petition.edit', p.id)" class="btn btn-danger">Kampanyayı düzenle</Link>
                         </div>
                         <div class="col-6 text-center">
                             <Link :href="route('petition.show', p.id)" class="btn btn-primary h-100">Kampanyaya git</Link>
+                        </div>
+                    </div>
+                    <div class="row" v-else>
+                        <div class="col-12">
+                            <Link :href="route('petition.destroy', p.id)" as="button" method="delete" class="btn btn-danger">Kampanyayı sil</Link>
                         </div>
                     </div>
                 </template>
@@ -35,10 +56,10 @@
         </div>
     </UserPage>
     <div
-    v-if="$page.props.flash.success"
+        v-if="$page.props.flash.success"
         ref="toast"
         class="toast align-items-center border-0 top-0 end-0 translate m-3 position-absolute"
-        :class="{'text-bg-success':$page.props.flash.success,'text-bg-danger':$page.props.flash.error}"
+        :class="{ 'text-bg-success': $page.props.flash.success, 'text-bg-danger': $page.props.flash.error }"
         role="alert"
         aria-live="assertive"
         aria-atomic="true"
@@ -57,6 +78,7 @@ import { Link } from "@inertiajs/vue3";
 export default {
     props: {
         petitions: Object,
+        null_pb: Number,
     },
     components: {
         Link,
@@ -68,8 +90,8 @@ export default {
             autohide: true,
             delay: 3000,
         });
-        if(this.$page.props.flash.success){
-            toastEl.show()
+        if (this.$page.props.flash.success) {
+            toastEl.show();
         }
         this.checkAndModifyBody();
     },
