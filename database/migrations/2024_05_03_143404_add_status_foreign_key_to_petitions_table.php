@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('petitions', function (Blueprint $table) {
             //
-            $table->foreign("status")->references("id")->on("petition_statuses");
+            $table->foreign("status_id")->references("id")->on("petition_statuses");
         });
     }
 
